@@ -7,6 +7,13 @@ interface Props {
   lrc: string
 }
 
+function formatTime(ms: number) {
+  const totalSec = Math.floor(ms / 1000)
+  const min = Math.floor(totalSec / 60)
+  const sec = totalSec % 60
+  return `${min}:${sec.toString().padStart(2, '0')}`
+}
+
 export default function Player({ snapshot, lrc }: Props) {
   const progressMs = useLocalProgress(snapshot)
   const lines = parseLrc(lrc)
@@ -19,21 +26,48 @@ export default function Player({ snapshot, lrc }: Props) {
   const curr = currentIndex >= 0 ? lines[currentIndex] : null
   const next = currentIndex >= 0 && currentIndex < lines.length - 1 ? lines[currentIndex + 1] : null
 
+  const durationMs = (snapshot.durationSec || 0) * 1000
+  const progressPercent = durationMs > 0 ? Math.min(100, (progressMs / durationMs) * 100) : 0
+
   return (
-    <div style={{ maxWidth: 800, margin: '0 auto' }}>
-      <div style={{ marginBottom: '2rem' }}>
-        <h2 style={{ margin: 0, fontSize: '2rem' }}>{snapshot.title || '未知歌曲'}</h2>
-        <p style={{ opacity: 0.7, margin: '0.5rem 0' }}>{snapshot.artist}</p>
-        <p style={{ opacity: 0.5, fontSize: '0.9rem' }}>
-          {snapshot.playbackState === 'playing' ? '播放中' : '已暂停'} · {Math.floor(progressMs / 1000)}s
-        </p>
+    <>
+      <div className="lyrics">
+        <div className="prev">{prev?.text || '\u00a0'}</div>
+        <div className="curr">{curr?.text || '\u00a0'}</div>
+        <div className="next">{next?.text || '\u00a0'}</div>
       </div>
 
-      <div style={{ fontSize: '1.8rem', lineHeight: 2.2, minHeight: 200 }}>
-        <div style={{ opacity: 0.4 }}>{prev?.text || '\u00a0'}</div>
-        <div style={{ fontWeight: 600, color: '#fff', fontSize: '2.2rem' }}>{curr?.text || '\u00a0'}</div>
-        <div style={{ opacity: 0.4 }}>{next?.text || '\u00a0'}</div>
+      <div className="bottom-panel">
+        <div className="controls">
+          <button className="btn">☀</button>
+          <button className="btn">♫ Lyrics Version ▾</button>
+          <button className="btn">⏪</button>
+          <span style={{ fontSize: '0.85rem', padding: '0 4px' }}>{formatTime(progressMs)}</span>
+          <button className="btn">⏩</button>
+          <button className="btn">↻ Sync</button>
+          <button className="btn">文A Translate</button>
+          <button className="btn">⚙ Settings</button>
+        </div>
+
+        <div className="song-info">
+          <div>
+            <div className="song-title">{snapshot.title || '未知歌曲'}</div>
+            <div className="song-artist">{snapshot.artist} · {snapshot.album}</div>
+          </div>
+          <div className="live-badge">
+            <span className="live-dot" />
+            Live
+          </div>
+        </div>
+
+        <div className="progress-bar">
+          <span>{formatTime(progressMs)}</span>
+          <div className="progress-track">
+            <div className="progress-fill" style={{ width: `${progressPercent}%` }} />
+          </div>
+          <span>{formatTime(durationMs)}</span>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
