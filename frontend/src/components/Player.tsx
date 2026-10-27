@@ -45,28 +45,30 @@ export default function Player({ snapshot, lrc }: Props) {
   const [fontSize, setFontSize] = useState(() => Number(localStorage.getItem('fontSize')) || 100)
   const [lineSpacing, setLineSpacing] = useState(() => Number(localStorage.getItem('lineSpacing')) || 120)
   const [align, setAlign] = useState<'left' | 'center' | 'right'>(() => (localStorage.getItem('align') as any) || 'center')
-  const [currColor, setCurrColor] = useState(() => localStorage.getItem('currColor') || '#1d1d1f')
-  const [otherColor, setOtherColor] = useState(() => localStorage.getItem('otherColor') || '#6e6e73')
+
+  const [dayCurr, setDayCurr] = useState(() => localStorage.getItem('dayCurr') || '#1d1d1f')
+  const [dayOther, setDayOther] = useState(() => localStorage.getItem('dayOther') || '#6e6e73')
+  const [nightCurr, setNightCurr] = useState(() => localStorage.getItem('nightCurr') || '#ffffff')
+  const [nightOther, setNightOther] = useState(() => localStorage.getItem('nightOther') || '#a1a1a6')
+
   const [copied, setCopied] = useState(false)
+
+  const currColor = theme === 'dark' ? nightCurr : dayCurr
+  const otherColor = theme === 'dark' ? nightOther : dayOther
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : '')
     localStorage.setItem('theme', theme)
-    if (theme === 'dark' && currColor === '#1d1d1f') {
-      setCurrColor('#ffffff')
-      setOtherColor('#a1a1a6')
-    } else if (theme === 'light' && currColor === '#ffffff') {
-      setCurrColor('#1d1d1f')
-      setOtherColor('#6e6e73')
-    }
   }, [theme])
 
   useEffect(() => { localStorage.setItem('offsetMs', String(offsetMs)) }, [offsetMs])
   useEffect(() => { localStorage.setItem('fontSize', String(fontSize)) }, [fontSize])
   useEffect(() => { localStorage.setItem('lineSpacing', String(lineSpacing)) }, [lineSpacing])
   useEffect(() => { localStorage.setItem('align', align) }, [align])
-  useEffect(() => { localStorage.setItem('currColor', currColor) }, [currColor])
-  useEffect(() => { localStorage.setItem('otherColor', otherColor) }, [otherColor])
+  useEffect(() => { localStorage.setItem('dayCurr', dayCurr) }, [dayCurr])
+  useEffect(() => { localStorage.setItem('dayOther', dayOther) }, [dayOther])
+  useEffect(() => { localStorage.setItem('nightCurr', nightCurr) }, [nightCurr])
+  useEffect(() => { localStorage.setItem('nightOther', nightOther) }, [nightOther])
 
   const toggleTheme = () => setTheme(t => t === 'light' ? 'dark' : 'light')
 
@@ -80,8 +82,10 @@ export default function Player({ snapshot, lrc }: Props) {
     setFontSize(100)
     setLineSpacing(120)
     setAlign('center')
-    setCurrColor(theme === 'dark' ? '#ffffff' : '#1d1d1f')
-    setOtherColor(theme === 'dark' ? '#a1a1a6' : '#6e6e73')
+    setDayCurr('#1d1d1f')
+    setDayOther('#6e6e73')
+    setNightCurr('#ffffff')
+    setNightOther('#a1a1a6')
   }
 
   return (
@@ -235,33 +239,40 @@ export default function Player({ snapshot, lrc }: Props) {
                     ))}
                   </div>
                 </div>
-                <div style={{ marginBottom: 20 }}>
-                  <div style={{ marginBottom: 10, fontSize: '0.9rem', fontWeight: 600 }}>Lyrics Colors</div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+
+                <div style={{ marginBottom: 16 }}>
+                  <div style={{ marginBottom: 8, fontSize: '0.9rem', fontWeight: 600 }}>Day Colors</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                     <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span>Current line</span>
-                      <input
-                        type="color"
-                        value={currColor}
-                        onChange={e => setCurrColor(e.target.value)}
-                        style={{ width: 48, height: 32, border: 'none', borderRadius: 8, cursor: 'pointer', background: 'transparent' }}
-                      />
+                      <span>Current</span>
+                      <input type="color" value={dayCurr} onChange={e => setDayCurr(e.target.value)} style={{ width: 48, height: 32, border: 'none', borderRadius: 8, cursor: 'pointer' }} />
                     </label>
                     <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span>Other lines</span>
-                      <input
-                        type="color"
-                        value={otherColor}
-                        onChange={e => setOtherColor(e.target.value)}
-                        style={{ width: 48, height: 32, border: 'none', borderRadius: 8, cursor: 'pointer', background: 'transparent' }}
-                      />
+                      <span>Other</span>
+                      <input type="color" value={dayOther} onChange={e => setDayOther(e.target.value)} style={{ width: 48, height: 32, border: 'none', borderRadius: 8, cursor: 'pointer' }} />
                     </label>
                   </div>
-                  <p style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', marginTop: 8 }}>
-                    Tap the color box to open the full color picker. Changes are saved automatically.
-                  </p>
                 </div>
-                <button className="btn" style={{ width: '100%', marginTop: 8 }} onClick={resetSettings}>
+
+                <div style={{ marginBottom: 16 }}>
+                  <div style={{ marginBottom: 8, fontSize: '0.9rem', fontWeight: 600 }}>Night Colors</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span>Current</span>
+                      <input type="color" value={nightCurr} onChange={e => setNightCurr(e.target.value)} style={{ width: 48, height: 32, border: 'none', borderRadius: 8, cursor: 'pointer' }} />
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span>Other</span>
+                      <input type="color" value={nightOther} onChange={e => setNightOther(e.target.value)} style={{ width: 48, height: 32, border: 'none', borderRadius: 8, cursor: 'pointer' }} />
+                    </label>
+                  </div>
+                </div>
+
+                <p style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', marginBottom: 12 }}>
+                  Day and Night colors are saved separately and apply automatically when you switch theme.
+                </p>
+
+                <button className="btn" style={{ width: '100%' }} onClick={resetSettings}>
                   Reset to default
                 </button>
               </>
