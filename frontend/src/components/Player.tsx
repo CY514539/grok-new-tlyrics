@@ -128,6 +128,76 @@ export default function Player({ snapshot, lrc }: Props) {
           <div className="drawer">
             <button className="drawer-close" onClick={() => setPanel(null)}>×</button>
 
+            {panel === 'version' && (
+              <>
+                <h3>Lyrics Version</h3>
+                {mockVersions.map(v => (
+                  <div key={v.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderBottom: '1px solid var(--border)' }}>
+                    <div>
+                      <div style={{ fontWeight: 500 }}>{v.title}</div>
+                      <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
+                        {v.artist} · {v.duration} · {v.synced ? 'Synced LRC' : 'Plain text'}
+                      </div>
+                    </div>
+                    {selectedVersion === v.id
+                      ? <span style={{ fontSize: '0.8rem', color: 'var(--accent)', fontWeight: 500 }}>In use</span>
+                      : <button className="btn" onClick={() => { setSelectedVersion(v.id); setPanel(null) }}>Use</button>}
+                  </div>
+                ))}
+                <button className="btn" style={{ width: '100%', marginTop: 14 }} onClick={() => setPanel(null)}>
+                  Search manually
+                </button>
+              </>
+            )}
+
+            {panel === 'sync' && (
+              <>
+                <h3>Share Lyrics Live</h3>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ width: 180, height: 180, margin: '8px auto 12px', background: '#fff', borderRadius: 12, display: 'grid', placeItems: 'center', border: '1px solid #eee', fontSize: '0.75rem', color: '#aaa' }}>
+                    QR Code
+                  </div>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: '0 0 12px' }}>Scan to follow on phone or tablet</p>
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    <input readOnly value="https://view.t-lyrics.com/s/demo" style={{ flex: 1, padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'transparent', color: 'inherit', fontSize: '0.8rem' }} />
+                    <button className="btn" onClick={copyLink}>{copied ? 'Copied' : 'Copy'}</button>
+                  </div>
+                  <div style={{ marginTop: 14, fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                    Link valid for 12 hours · Read-only viewer
+                  </div>
+                </div>
+              </>
+            )}
+
+            {panel === 'translate' && (
+              <>
+                <h3>Translate Lyrics</h3>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+                  <div>
+                    <div style={{ fontWeight: 500 }}>Show translation</div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Keep original lyrics visible</div>
+                  </div>
+                  <button className={`toggle ${translateOn ? 'on' : ''}`} onClick={() => setTranslateOn(!translateOn)} />
+                </div>
+                <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+                  <select value={fromLang} onChange={e => setFromLang(e.target.value)} className="btn" style={{ flex: 1 }}>
+                    <option value="auto">Auto detect</option>
+                    <option value="zh-TW">繁體中文</option>
+                    <option value="en">English</option>
+                  </select>
+                  <span style={{ opacity: 0.4 }}>→</span>
+                  <select value={toLang} onChange={e => setToLang(e.target.value)} className="btn" style={{ flex: 1 }}>
+                    <option value="zh-CN">简体中文</option>
+                    <option value="en">English</option>
+                    <option value="ja">日本語</option>
+                  </select>
+                </div>
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: 16 }}>
+                  Beta: lyric lines are sent for translation only when enabled.
+                </p>
+              </>
+            )}
+
             {panel === 'settings' && (
               <>
                 <h3>Lyrics Settings</h3>
@@ -176,9 +246,6 @@ export default function Player({ snapshot, lrc }: Props) {
                 </button>
               </>
             )}
-
-            {/* other panels unchanged for brevity - they remain as before */}
-            {panel !== 'settings' && <p style={{ color: 'var(--text-secondary)' }}>Panel content preserved.</p>}
           </div>
         </>
       )}
