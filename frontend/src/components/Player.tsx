@@ -98,13 +98,15 @@ export default function Player({ snapshot, lrc }: Props) {
 
       <div className="bottom-panel">
         <div className="controls">
-          <button className={`btn ${theme === 'dark' ? 'active' : ''}`} onClick={toggleTheme}>{theme === 'light' ? '☀' : '☾'}</button>
-          <button className="btn" onClick={() => setPanel('version')}>Lyrics Version</button>
-          <button className="btn" onClick={() => setOffsetMs(o => o - 500)}>⏪</button>
-          <span style={{ fontSize: '0.8rem', minWidth: 48, textAlign: 'center' }}>
+          <button className={`btn icon-only ${theme === 'dark' ? 'active' : ''}`} onClick={toggleTheme} title="日夜模式">
+            {theme === 'light' ? '☀' : '☾'}
+          </button>
+          <button className="btn" onClick={() => setPanel('version')}>Version</button>
+          <button className="btn icon-only" onClick={() => setOffsetMs(o => o - 500)}>⏪</button>
+          <span className="offset-display">
             {offsetMs >= 0 ? '+' : ''}{(offsetMs / 1000).toFixed(1)}s
           </span>
-          <button className="btn" onClick={() => setOffsetMs(o => o + 500)}>⏩</button>
+          <button className="btn icon-only" onClick={() => setOffsetMs(o => o + 500)}>⏩</button>
           <button className="btn" onClick={() => setPanel('sync')}>Sync</button>
           <button className="btn" onClick={() => setPanel('translate')}>Translate</button>
           <button className="btn" onClick={() => setPanel('settings')}>Settings</button>
