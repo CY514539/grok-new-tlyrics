@@ -14,15 +14,15 @@
 
 [data-theme="dark"] {
   --bg: #0c0c0e;
-  --panel: rgba(28,28,32,0.94);
+  --panel: rgba(32,32,36,0.96);
   --text: #f3f4f6;
-  --text-secondary: #9ca3af;
-  --border: rgba(255,255,255,0.1);
-  --shadow: 0 10px 40px rgba(0,0,0,0.45);
+  --text-secondary: #b0b4ba;
+  --border: rgba(255,255,255,0.12);
+  --shadow: 0 10px 40px rgba(0,0,0,0.5);
   --accent: #818cf8;
-  --btn-bg: rgba(255,255,255,0.08);
-  --btn-hover: rgba(255,255,255,0.14);
-  --primary: #f9fafb;
+  --btn-bg: rgba(255,255,255,0.1);
+  --btn-hover: rgba(255,255,255,0.16);
+  --primary: #6366f1;
 }
 
 * { box-sizing: border-box; }
@@ -100,7 +100,7 @@ body {
 .lyrics .prev, .lyrics .next {
   font-size: 1.3em;
   font-weight: 500;
-  opacity: 0.6;
+  opacity: 0.65;
 }
 
 .lyrics .curr {
@@ -195,7 +195,7 @@ body {
 }
 
 .offset-btn:hover { background: rgba(0,0,0,0.04); }
-[data-theme="dark"] .offset-btn:hover { background: rgba(255,255,255,0.06); }
+[data-theme="dark"] .offset-btn:hover { background: rgba(255,255,255,0.08); }
 
 .offset-value {
   font-size: 0.95rem;
@@ -213,14 +213,14 @@ body {
 
 .live-badge {
   display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(34,197,94,0.12); color: #16a34a;
+  background: rgba(34,197,94,0.15); color: #4ade80;
   border-radius: 999px; padding: 3px 9px; font-size: 0.78rem; font-weight: 600;
 }
-.live-dot { width: 6px; height: 6px; background: #22c55e; border-radius: 50%; }
+.live-dot { width: 6px; height: 6px; background: #4ade80; border-radius: 50%; }
 
 .progress-bar { display: flex; align-items: center; gap: 10px; font-size: 0.8rem; color: var(--text-secondary); font-weight: 500; }
 .progress-track { flex: 1; height: 3px; background: rgba(0,0,0,0.08); border-radius: 2px; }
-[data-theme="dark"] .progress-track { background: rgba(255,255,255,0.12); }
+[data-theme="dark"] .progress-track { background: rgba(255,255,255,0.15); }
 .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; }
 
 .drawer-overlay {
@@ -239,7 +239,7 @@ body {
   background: var(--panel);
   backdrop-filter: blur(30px);
   border-left: 1px solid var(--border);
-  box-shadow: -8px 0 32px rgba(0,0,0,0.12);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.2);
   padding: 24px 20px;
   overflow-y: auto;
   z-index: 100;
@@ -270,7 +270,7 @@ body {
 
 .toggle {
   width: 44px; height: 26px; border-radius: 13px;
-  background: #d1d5db; position: relative; cursor: pointer; border: none;
+  background: #4b5563; position: relative; cursor: pointer; border: none;
   transition: background 0.2s;
 }
 .toggle.on { background: var(--accent); }
@@ -285,7 +285,9 @@ body {
   width: 100%; height: 46px; border-radius: 10px;
   border: 1px solid var(--border); cursor: pointer;
   display: flex; align-items: flex-end; padding: 6px;
-  font-size: 0.72rem; font-weight: 600; color: #fff;
+  font-size: 0.72rem; font-weight: 600;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
   transition: transform 0.15s;
 }
 .color-swatch:hover { transform: scale(1.02); }
