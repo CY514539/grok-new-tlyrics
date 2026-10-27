@@ -4,7 +4,7 @@
 
 ## 当前阶段
 
-**协议已定义** — WebSocket 与 Canonical Snapshot 契约已就绪，可开始搭建播放器骨架。
+**前端骨架已就绪** — 三行 KTV 播放器 + 本地时钟推算已可运行。
 
 ## 已完成
 
@@ -13,16 +13,17 @@
 - [x] 完善 Mock 策略并实现最小发送工具
 - [x] 定义 Canonical Media Snapshot 结构
 - [x] 定义 WebSocket 协议
+- [x] 搭建前端播放器骨架（三行 KTV + 本地时钟）
 
 ## 正在进行
 
-- 搭建前端播放器骨架（三行 KTV + 本地时钟推算）
+- 实现歌词匹配服务的接口契约（先 Mock）
 
 ## 下一步（按优先级）
 
-1. 搭建前端播放器骨架（三行 KTV + 本地时钟推算）
-2. 实现歌词匹配服务的接口契约（先 Mock）
-3. 前端对接 WebSocket 并消费 Snapshot
+1. 实现歌词匹配服务的接口契约（先 Mock）
+2. 前端对接 WebSocket 并消费 Snapshot
+3. 后端最小媒体 Worker 与 Snapshot 生成
 
 ## 已知问题 / 风险
 
