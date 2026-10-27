@@ -109,9 +109,9 @@ export default function Player({ snapshot, lrc }: Props) {
           </button>
           <button className="btn" onClick={() => setPanel('version')}>Version</button>
           <div className="offset-group">
-            <button className="offset-btn" onClick={() => setOffsetMs(o => o - 500)}>⏪</button>
+            <button className="offset-btn" onClick={() => setOffsetMs(o => o - 500)}>◀</button>
             <span className="offset-value">{offsetMs >= 0 ? '+' : ''}{(offsetMs / 1000).toFixed(1)}s</span>
-            <button className="offset-btn" onClick={() => setOffsetMs(o => o + 500)}>⏩</button>
+            <button className="offset-btn" onClick={() => setOffsetMs(o => o + 500)}>▶</button>
           </div>
           <button className="btn" onClick={() => setPanel('sync')}>Sync</button>
           <button className="btn" onClick={() => setPanel('translate')}>Translate</button>
