@@ -16,9 +16,8 @@ function formatTime(ms: number) {
 }
 
 const mockVersions = [
-  { id: 'v1', title: '醉迷情人', artist: '陳慧琳', duration: '3:12', synced: true },
-  { id: 'v2', title: '醉迷情人 (Live)', artist: '陳慧琳', duration: '3:45', synced: true },
-  { id: 'v3', title: '醉迷情人', artist: '陳慧琳', duration: '3:10', synced: false },
+  { id: 'v1', title: '东风破', artist: '周杰伦', duration: '5:10', synced: true },
+  { id: 'v2', title: '东风破 (Live)', artist: '周杰伦', duration: '5:30', synced: true },
 ]
 
 const colorPresets = {
@@ -57,7 +56,7 @@ export default function Player({ snapshot, lrc }: Props) {
   const [fromLang, setFromLang] = useState('auto')
   const [toLang, setToLang] = useState('zh-CN')
   const [fontSize, setFontSize] = useState(() => Number(localStorage.getItem('fontSize')) || 100)
-  const [lineSpacing, setLineSpacing] = useState(() => Number(localStorage.getItem('lineSpacing')) || 100)
+  const [lineSpacing, setLineSpacing] = useState(() => Number(localStorage.getItem('lineSpacing')) || 120)
   const [align, setAlign] = useState<'left' | 'center' | 'right'>(() => (localStorage.getItem('align') as any) || 'center')
   const [colorIndex, setColorIndex] = useState(() => Number(localStorage.getItem('colorIndex')) || 0)
   const [copied, setCopied] = useState(false)
@@ -85,10 +84,10 @@ export default function Player({ snapshot, lrc }: Props) {
 
   return (
     <>
-      <div className="lyrics" style={{ textAlign: align, fontSize: `${fontSize}%`, lineHeight: lineSpacing / 80 }}>
-        <div className="prev" style={{ color: colors.next }}>{prev?.text || '\u00a0'}</div>
-        <div className="curr" style={{ color: colors.curr }}>{curr?.text || '\u00a0'}</div>
-        <div className="next" style={{ color: colors.next }}>{next?.text || '\u00a0'}</div>
+      <div className="lyrics" style={{ textAlign: align, fontSize: `${fontSize}%`, lineHeight: lineSpacing / 100 }}>
+        <div className="line prev" style={{ color: colors.next }}>{prev?.text || '\u00a0'}</div>
+        <div className="line curr" style={{ color: colors.curr }}>{curr?.text || '\u00a0'}</div>
+        <div className="line next" style={{ color: colors.next }}>{next?.text || '\u00a0'}</div>
       </div>
 
       <div className="bottom-panel">
@@ -241,7 +240,7 @@ export default function Player({ snapshot, lrc }: Props) {
                     ))}
                   </div>
                 </div>
-                <button className="btn" style={{ width: '100%', marginTop: 8 }} onClick={() => { setFontSize(100); setLineSpacing(100); setAlign('center'); setColorIndex(0) }}>
+                <button className="btn" style={{ width: '100%', marginTop: 8 }} onClick={() => { setFontSize(100); setLineSpacing(120); setAlign('center'); setColorIndex(0) }}>
                   Reset to default
                 </button>
               </>
