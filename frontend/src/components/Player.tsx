@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import type { CanonicalMediaSnapshot } from '../types'
 import { useLocalProgress } from '../hooks/useLocalProgress'
 import { parseLrc } from '../utils/lrc'
