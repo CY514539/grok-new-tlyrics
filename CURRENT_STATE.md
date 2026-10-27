@@ -4,24 +4,24 @@
 
 ## 当前阶段
 
-**项目初始化** — 项目大脑文件已建立，仓库为空。
+**项目初始化完成** — 项目大脑文件已推送到仓库，基地已就绪。
 
 ## 已完成
 
 - [x] 确定干净重做策略
 - [x] 建立项目大脑文件（ARCHITECTURE / DATA_MODEL / CURRENT_STATE 等）
+- [x] 将基础文件推送到 GitHub 仓库
 
 ## 正在进行
 
-- 等待用户将基础文件推送到 GitHub 仓库
+- 完善 Mock 策略并实现最小 Mock 媒体事件发送工具
 
 ## 下一步（按优先级）
 
-1. 用户将本目录文件推送到 https://github.com/CY514539/grok-new-tlyrics
-2. 完善 `docs/MOCK_STRATEGY.md` 并实现一个最小 Mock 媒体事件发送工具
-3. 定义 WebSocket 协议与 Canonical Snapshot 结构
-4. 搭建前端播放器骨架（三行 KTV + 本地时钟推算）
-5. 实现歌词匹配服务的接口契约（先 Mock）
+1. 完善 `docs/MOCK_STRATEGY.md` 并实现一个最小 Mock 媒体事件发送工具
+2. 定义 WebSocket 协议与 Canonical Snapshot 结构
+3. 搭建前端播放器骨架（三行 KTV + 本地时钟推算）
+4. 实现歌词匹配服务的接口契约（先 Mock）
 
 ## 已知问题 / 风险
 
