@@ -20,19 +20,6 @@ const mockVersions = [
   { id: 'v2', title: '东风破 (Live)', artist: '周杰伦', duration: '5:30', synced: true },
 ]
 
-const colorPresets = {
-  day: [
-    { bg: '#f5f6f8', curr: '#1d1d1f', next: '#6e6e73', label: 'Default' },
-    { bg: '#ffffff', curr: '#000000', next: '#555555', label: 'High Contrast' },
-    { bg: '#f0f4ff', curr: '#1e3a8a', next: '#64748b', label: 'Blue' },
-  ],
-  night: [
-    { bg: '#000000', curr: '#ffffff', next: '#86868b', label: 'Default' },
-    { bg: '#111111', curr: '#f5f5f7', next: '#aaaaaa', label: 'Soft' },
-    { bg: '#0a0a1a', curr: '#a5b4fc', next: '#6b7280', label: 'Night Blue' },
-  ],
-}
-
 export default function Player({ snapshot, lrc }: Props) {
   const progressMs = useLocalProgress(snapshot)
   const lines = parseLrc(lrc)
@@ -58,21 +45,28 @@ export default function Player({ snapshot, lrc }: Props) {
   const [fontSize, setFontSize] = useState(() => Number(localStorage.getItem('fontSize')) || 100)
   const [lineSpacing, setLineSpacing] = useState(() => Number(localStorage.getItem('lineSpacing')) || 120)
   const [align, setAlign] = useState<'left' | 'center' | 'right'>(() => (localStorage.getItem('align') as any) || 'center')
-  const [colorIndex, setColorIndex] = useState(() => Number(localStorage.getItem('colorIndex')) || 0)
+  const [currColor, setCurrColor] = useState(() => localStorage.getItem('currColor') || '#1d1d1f')
+  const [otherColor, setOtherColor] = useState(() => localStorage.getItem('otherColor') || '#6e6e73')
   const [copied, setCopied] = useState(false)
-
-  const colors = colorPresets[theme === 'dark' ? 'night' : 'day'][colorIndex] || colorPresets.day[0]
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : '')
     localStorage.setItem('theme', theme)
+    if (theme === 'dark' && currColor === '#1d1d1f') {
+      setCurrColor('#ffffff')
+      setOtherColor('#a1a1a6')
+    } else if (theme === 'light' && currColor === '#ffffff') {
+      setCurrColor('#1d1d1f')
+      setOtherColor('#6e6e73')
+    }
   }, [theme])
 
   useEffect(() => { localStorage.setItem('offsetMs', String(offsetMs)) }, [offsetMs])
   useEffect(() => { localStorage.setItem('fontSize', String(fontSize)) }, [fontSize])
   useEffect(() => { localStorage.setItem('lineSpacing', String(lineSpacing)) }, [lineSpacing])
   useEffect(() => { localStorage.setItem('align', align) }, [align])
-  useEffect(() => { localStorage.setItem('colorIndex', String(colorIndex)) }, [colorIndex])
+  useEffect(() => { localStorage.setItem('currColor', currColor) }, [currColor])
+  useEffect(() => { localStorage.setItem('otherColor', otherColor) }, [otherColor])
 
   const toggleTheme = () => setTheme(t => t === 'light' ? 'dark' : 'light')
 
@@ -80,6 +74,14 @@ export default function Player({ snapshot, lrc }: Props) {
     navigator.clipboard?.writeText('https://view.t-lyrics.com/s/demo')
     setCopied(true)
     setTimeout(() => setCopied(false), 1500)
+  }
+
+  const resetSettings = () => {
+    setFontSize(100)
+    setLineSpacing(120)
+    setAlign('center')
+    setCurrColor(theme === 'dark' ? '#ffffff' : '#1d1d1f')
+    setOtherColor(theme === 'dark' ? '#a1a1a6' : '#6e6e73')
   }
 
   return (
@@ -90,9 +92,9 @@ export default function Player({ snapshot, lrc }: Props) {
           className="lyrics"
           style={{ textAlign: align, fontSize: `${fontSize}%`, lineHeight: lineSpacing / 100 }}
         >
-          <div className="line prev" style={{ color: colors.next }}>{prev?.text || '\u00a0'}</div>
-          <div className="line curr" style={{ color: colors.curr }}>{curr?.text || '\u00a0'}</div>
-          <div className="line next" style={{ color: colors.next }}>{next?.text || '\u00a0'}</div>
+          <div className="line prev" style={{ color: otherColor }}>{prev?.text || '\u00a0'}</div>
+          <div className="line curr" style={{ color: currColor }}>{curr?.text || '\u00a0'}</div>
+          <div className="line next" style={{ color: otherColor }}>{next?.text || '\u00a0'}</div>
         </div>
       </div>
 
@@ -223,7 +225,7 @@ export default function Player({ snapshot, lrc }: Props) {
                   </div>
                   <input type="range" min="70" max="180" value={lineSpacing} onChange={e => setLineSpacing(Number(e.target.value))} style={{ width: '100%' }} />
                 </div>
-                <div style={{ marginBottom: 16 }}>
+                <div style={{ marginBottom: 20 }}>
                   <div style={{ marginBottom: 8 }}>Alignment</div>
                   <div style={{ display: 'flex', gap: 8 }}>
                     {(['left', 'center', 'right'] as const).map(a => (
@@ -233,22 +235,33 @@ export default function Player({ snapshot, lrc }: Props) {
                     ))}
                   </div>
                 </div>
-                <div style={{ marginBottom: 16 }}>
-                  <div style={{ marginBottom: 8, fontSize: '0.85rem' }}>Colors</div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
-                    {colorPresets[theme === 'dark' ? 'night' : 'day'].map((c, i) => (
-                      <div
-                        key={i}
-                        className="color-swatch"
-                        style={{ background: c.curr, outline: colorIndex === i ? '2px solid var(--accent)' : undefined }}
-                        onClick={() => setColorIndex(i)}
-                      >
-                        {c.label}
-                      </div>
-                    ))}
+                <div style={{ marginBottom: 20 }}>
+                  <div style={{ marginBottom: 10, fontSize: '0.9rem', fontWeight: 600 }}>Lyrics Colors</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span>Current line</span>
+                      <input
+                        type="color"
+                        value={currColor}
+                        onChange={e => setCurrColor(e.target.value)}
+                        style={{ width: 48, height: 32, border: 'none', borderRadius: 8, cursor: 'pointer', background: 'transparent' }}
+                      />
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span>Other lines</span>
+                      <input
+                        type="color"
+                        value={otherColor}
+                        onChange={e => setOtherColor(e.target.value)}
+                        style={{ width: 48, height: 32, border: 'none', borderRadius: 8, cursor: 'pointer', background: 'transparent' }}
+                      />
+                    </label>
                   </div>
+                  <p style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', marginTop: 8 }}>
+                    Tap the color box to open the full color picker. Changes are saved automatically.
+                  </p>
                 </div>
-                <button className="btn" style={{ width: '100%', marginTop: 8 }} onClick={() => { setFontSize(100); setLineSpacing(120); setAlign('center'); setColorIndex(0) }}>
+                <button className="btn" style={{ width: '100%', marginTop: 8 }} onClick={resetSettings}>
                   Reset to default
                 </button>
               </>
