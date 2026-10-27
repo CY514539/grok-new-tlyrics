@@ -124,8 +124,8 @@ body {
   background: var(--panel);
   backdrop-filter: blur(24px);
   border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 14px 18px 16px;
+  border-radius: 22px;
+  padding: 14px 16px 16px;
   box-shadow: var(--shadow);
   z-index: 20;
 }
@@ -133,29 +133,47 @@ body {
 .controls {
   display: flex;
   align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
   margin-bottom: 12px;
+  flex-wrap: nowrap;
 }
 
 .btn {
   background: rgba(0,0,0,0.05);
   border: none;
-  border-radius: 999px;
-  padding: 8px 12px;
-  font-size: 0.82rem;
+  border-radius: 12px;
+  padding: 8px 10px;
+  font-size: 0.8rem;
   color: var(--text);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  justify-content: center;
+  gap: 4px;
+  min-width: 72px;
+  height: 36px;
   transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.btn.icon-only {
+  min-width: 36px;
+  width: 36px;
+  padding: 0;
 }
 
 [data-theme="dark"] .btn { background: rgba(255,255,255,0.08); }
 .btn:hover { background: rgba(0,0,0,0.1); }
 [data-theme="dark"] .btn:hover { background: rgba(255,255,255,0.14); }
 .btn.active { background: var(--accent); color: #fff; }
+
+.offset-display {
+  font-size: 0.8rem;
+  min-width: 52px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
 
 .song-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .song-title { font-weight: 600; font-size: 0.95rem; }
