@@ -95,6 +95,7 @@ body {
   border-radius: 20px;
   padding: 14px 18px 16px;
   box-shadow: var(--shadow);
+  z-index: 20;
 }
 
 .controls {
@@ -139,34 +140,46 @@ body {
 [data-theme="dark"] .progress-track { background: rgba(255,255,255,0.15); }
 .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; }
 
-.modal-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.4);
-  backdrop-filter: blur(6px);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 100;
+/* Side drawer instead of full overlay */
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  z-index: 90;
 }
 
-.modal {
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(380px, 92vw);
   background: var(--panel);
-  backdrop-filter: blur(40px);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 24px;
-  width: min(440px, 94vw);
-  box-shadow: var(--shadow);
+  backdrop-filter: blur(30px);
+  border-left: 1px solid var(--border);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.12);
+  padding: 24px 20px;
+  overflow-y: auto;
+  z-index: 100;
   color: var(--text);
 }
 
-.modal h3 { margin: 0 0 18px; font-size: 1.15rem; font-weight: 600; }
+.drawer h3 { margin: 0 0 18px; font-size: 1.15rem; font-weight: 600; }
 
-.modal-close {
-  position: absolute; top: 14px; right: 14px;
-  background: rgba(0,0,0,0.06); border: none; border-radius: 50%;
-  width: 28px; height: 28px; font-size: 1rem; cursor: pointer;
+.drawer-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(0,0,0,0.06);
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  font-size: 1rem;
+  cursor: pointer;
   color: var(--text-secondary);
 }
-[data-theme="dark"] .modal-close { background: rgba(255,255,255,0.1); }
+[data-theme="dark"] .drawer-close { background: rgba(255,255,255,0.1); }
 
 .toggle {
   width: 44px; height: 26px; border-radius: 13px;
