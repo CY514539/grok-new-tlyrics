@@ -16,9 +16,9 @@ function formatTime(ms: number) {
 }
 
 const mockVersions = [
-  { id: 'v1', title: '醉迷情人', artist: '陳慧琳', duration: '3:12', synced: true, inUse: true },
-  { id: 'v2', title: '醉迷情人 (Live)', artist: '陳慧琳', duration: '3:45', synced: true, inUse: false },
-  { id: 'v3', title: '醉迷情人', artist: '陳慧琳', duration: '3:10', synced: false, inUse: false },
+  { id: 'v1', title: '醉迷情人', artist: '陳慧琳', duration: '3:12', synced: true },
+  { id: 'v2', title: '醉迷情人 (Live)', artist: '陳慧琳', duration: '3:45', synced: true },
+  { id: 'v3', title: '醉迷情人', artist: '陳慧琳', duration: '3:10', synced: false },
 ]
 
 export default function Player({ snapshot, lrc }: Props) {
@@ -41,8 +41,12 @@ export default function Player({ snapshot, lrc }: Props) {
   const [offsetMs, setOffsetMs] = useState(0)
   const [selectedVersion, setSelectedVersion] = useState('v1')
   const [translateOn, setTranslateOn] = useState(false)
+  const [fromLang, setFromLang] = useState('auto')
+  const [toLang, setToLang] = useState('zh-CN')
   const [fontSize, setFontSize] = useState(100)
-  const [align, setAlign] = useState<'center' | 'left' | 'right'>('center')
+  const [lineSpacing, setLineSpacing] = useState(100)
+  const [align, setAlign] = useState<'left' | 'center' | 'right'>('center')
+  const [copied, setCopied] = useState(false)
 
   const toggleTheme = () => {
     const next = theme === 'light' ? 'dark' : 'light'
@@ -50,9 +54,15 @@ export default function Player({ snapshot, lrc }: Props) {
     document.documentElement.setAttribute('data-theme', next === 'dark' ? 'dark' : '')
   }
 
+  const copyLink = () => {
+    navigator.clipboard?.writeText('https://view.t-lyrics.com/s/demo')
+    setCopied(true)
+    setTimeout(() => setCopied(false), 1500)
+  }
+
   return (
     <>
-      <div className="lyrics" style={{ textAlign: align, fontSize: `${fontSize}%` }}>
+      <div className="lyrics" style={{ textAlign: align, fontSize: `${fontSize}%`, lineHeight: lineSpacing / 100 }}>
         <div className="prev">{prev?.text || '\u00a0'}</div>
         <div className="curr">{curr?.text || '\u00a0'}</div>
         <div className="next">{next?.text || '\u00a0'}</div>
@@ -91,38 +101,47 @@ export default function Player({ snapshot, lrc }: Props) {
 
       {modal && (
         <div className="modal-overlay" onClick={() => setModal(null)}>
-          <div className="modal" onClick={e => e.stopPropagation()} style={{ position: 'relative' }}>
+          <div className="modal" onClick={e => e.stopPropagation()} style={{ position: 'relative', maxHeight: '80vh', overflowY: 'auto' }}>
             <button className="modal-close" onClick={() => setModal(null)}>×</button>
 
             {modal === 'version' && (
               <>
                 <h3>Lyrics Version</h3>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
                   {mockVersions.map(v => (
-                    <div key={v.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid var(--border)' }}>
+                    <div key={v.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderBottom: '1px solid var(--border)' }}>
                       <div>
                         <div style={{ fontWeight: 500 }}>{v.title}</div>
-                        <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{v.artist} · {v.duration} · {v.synced ? 'Synced' : 'Plain'}</div>
+                        <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
+                          {v.artist} · {v.duration} · {v.synced ? 'Synced LRC' : 'Plain text'}
+                        </div>
                       </div>
                       {selectedVersion === v.id
-                        ? <span style={{ fontSize: '0.8rem', color: 'var(--accent)' }}>In use</span>
-                        : <button className="btn" onClick={() => setSelectedVersion(v.id)}>Use</button>}
+                        ? <span style={{ fontSize: '0.8rem', color: 'var(--accent)', fontWeight: 500 }}>In use</span>
+                        : <button className="btn" onClick={() => { setSelectedVersion(v.id); setModal(null) }}>Use</button>}
                     </div>
                   ))}
                 </div>
+                <button className="btn" style={{ width: '100%', marginTop: 12 }} onClick={() => setModal(null)}>
+                  Search manually
+                </button>
               </>
             )}
 
             {modal === 'sync' && (
               <>
                 <h3>Share Lyrics Live</h3>
-                <div style={{ textAlign: 'center', padding: '16px 0' }}>
-                  <div style={{ width: 160, height: 160, margin: '0 auto 12px', background: '#fff', border: '1px solid #eee', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem', color: '#999' }}>
-                    QR Code
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ width: 180, height: 180, margin: '12px auto', background: '#fff', borderRadius: 12, display: 'grid', placeItems: 'center', border: '1px solid #eee', fontSize: '0.75rem', color: '#aaa' }}>
+                    QR Code<br/>(placeholder)
                   </div>
-                  <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Scan to follow on phone</div>
-                  <div style={{ marginTop: 12, fontSize: '0.8rem', wordBreak: 'break-all', background: 'rgba(0,0,0,0.04)', padding: 8, borderRadius: 8 }}>
-                    https://view.t-lyrics.com/s/demo
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Scan to follow lyrics on your phone</p>
+                  <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                    <input readOnly value="https://view.t-lyrics.com/s/demo" style={{ flex: 1, padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'transparent', color: 'inherit', fontSize: '0.8rem' }} />
+                    <button className="btn" onClick={copyLink}>{copied ? 'Copied' : 'Copy'}</button>
+                  </div>
+                  <div style={{ marginTop: 16, fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                    Link valid for 12 hours · Read-only
                   </div>
                 </div>
               </>
@@ -131,40 +150,70 @@ export default function Player({ snapshot, lrc }: Props) {
             {modal === 'translate' && (
               <>
                 <h3>Translate Lyrics</h3>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                  <span>Show translation</span>
-                  <button className="btn" onClick={() => setTranslateOn(!translateOn)}>{translateOn ? 'On' : 'Off'}</button>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
+                  <div>
+                    <div>Show translation</div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Keep original lyrics visible</div>
+                  </div>
+                  <button className="btn" onClick={() => setTranslateOn(!translateOn)} style={{ background: translateOn ? 'var(--accent)' : undefined, color: translateOn ? '#fff' : undefined }}>
+                    {translateOn ? 'On' : 'Off'}
+                  </button>
                 </div>
-                <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                  <select className="btn" style={{ flex: 1 }}><option>Auto detect</option><option>繁體中文</option><option>English</option></select>
-                  <span>→</span>
-                  <select className="btn" style={{ flex: 1 }}><option>简体中文</option><option>English</option><option>日本語</option></select>
+                <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+                  <select value={fromLang} onChange={e => setFromLang(e.target.value)} className="btn" style={{ flex: 1 }}>
+                    <option value="auto">Auto detect</option>
+                    <option value="zh-TW">繁體中文</option>
+                    <option value="en">English</option>
+                  </select>
+                  <span style={{ opacity: 0.5 }}>→</span>
+                  <select value={toLang} onChange={e => setToLang(e.target.value)} className="btn" style={{ flex: 1 }}>
+                    <option value="zh-CN">简体中文</option>
+                    <option value="en">English</option>
+                    <option value="ja">日本語</option>
+                  </select>
                 </div>
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: 16 }}>
+                  Beta: lyrics are translated only when enabled.
+                </p>
               </>
             )}
 
             {modal === 'settings' && (
               <>
                 <h3>Lyrics Settings</h3>
-                <div style={{ marginBottom: 16 }}>
+                <div style={{ marginBottom: 18 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
                     <span>Font size</span><span>{fontSize}%</span>
                   </div>
-                  <input type="range" min="70" max="140" value={fontSize} onChange={e => setFontSize(Number(e.target.value))} style={{ width: '100%' }} />
+                  <input type="range" min="70" max="150" value={fontSize} onChange={e => setFontSize(Number(e.target.value))} style={{ width: '100%' }} />
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                    <span>Smaller</span><span>Default</span><span>Larger</span>
+                  </div>
                 </div>
-                <div style={{ marginBottom: 16 }}>
-                  <div style={{ marginBottom: 6 }}>Alignment</div>
+                <div style={{ marginBottom: 18 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                    <span>Line spacing</span><span>{lineSpacing}%</span>
+                  </div>
+                  <input type="range" min="80" max="140" value={lineSpacing} onChange={e => setLineSpacing(Number(e.target.value))} style={{ width: '100%' }} />
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  <div style={{ marginBottom: 8 }}>Alignment</div>
                   <div style={{ display: 'flex', gap: 8 }}>
                     {(['left', 'center', 'right'] as const).map(a => (
-                      <button key={a} className="btn" style={{ flex: 1, background: align === a ? 'var(--accent)' : undefined, color: align === a ? '#fff' : undefined }} onClick={() => setAlign(a)}>
-                        {a === 'left' ? '≡' : a === 'center' ? '≡' : '≡'}
+                      <button
+                        key={a}
+                        className="btn"
+                        style={{ flex: 1, background: align === a ? 'var(--accent)' : undefined, color: align === a ? '#fff' : undefined }}
+                        onClick={() => setAlign(a)}
+                      >
+                        {a === 'left' ? '←' : a === 'center' ? '↔' : '→'}
                       </button>
                     ))}
                   </div>
                 </div>
-                <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                  颜色与布局设置将在后续完善。
-                </div>
+                <button className="btn" style={{ width: '100%', marginTop: 8 }} onClick={() => { setFontSize(100); setLineSpacing(100); setAlign('center') }}>
+                  Reset to default
+                </button>
               </>
             )}
           </div>
