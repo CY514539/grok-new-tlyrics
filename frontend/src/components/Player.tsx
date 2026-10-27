@@ -37,7 +37,7 @@ export default function Player({ snapshot, lrc }: Props) {
   const progressPercent = durationMs > 0 ? Math.min(100, (progressMs / durationMs) * 100) : 0
 
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
-  const [modal, setModal] = useState<string | null>(null)
+  const [panel, setPanel] = useState<string | null>(null)
   const [offsetMs, setOffsetMs] = useState(0)
   const [selectedVersion, setSelectedVersion] = useState('v1')
   const [translateOn, setTranslateOn] = useState(false)
@@ -71,15 +71,15 @@ export default function Player({ snapshot, lrc }: Props) {
       <div className="bottom-panel">
         <div className="controls">
           <button className="btn" onClick={toggleTheme}>{theme === 'light' ? '☀' : '☾'}</button>
-          <button className="btn" onClick={() => setModal('version')}>Lyrics Version</button>
+          <button className="btn" onClick={() => setPanel('version')}>Lyrics Version</button>
           <button className="btn" onClick={() => setOffsetMs(o => o - 500)}>⏪</button>
           <span style={{ fontSize: '0.8rem', minWidth: 48, textAlign: 'center' }}>
             {offsetMs >= 0 ? '+' : ''}{(offsetMs / 1000).toFixed(1)}s
           </span>
           <button className="btn" onClick={() => setOffsetMs(o => o + 500)}>⏩</button>
-          <button className="btn" onClick={() => setModal('sync')}>Sync</button>
-          <button className="btn" onClick={() => setModal('translate')}>Translate</button>
-          <button className="btn" onClick={() => setModal('settings')}>Settings</button>
+          <button className="btn" onClick={() => setPanel('sync')}>Sync</button>
+          <button className="btn" onClick={() => setPanel('translate')}>Translate</button>
+          <button className="btn" onClick={() => setPanel('settings')}>Settings</button>
         </div>
 
         <div className="song-info">
@@ -99,12 +99,13 @@ export default function Player({ snapshot, lrc }: Props) {
         </div>
       </div>
 
-      {modal && (
-        <div className="modal-overlay" onClick={() => setModal(null)}>
-          <div className="modal" onClick={e => e.stopPropagation()} style={{ position: 'relative', maxHeight: '80vh', overflowY: 'auto' }}>
-            <button className="modal-close" onClick={() => setModal(null)}>×</button>
+      {panel && (
+        <>
+          <div className="drawer-overlay" onClick={() => setPanel(null)} />
+          <div className="drawer">
+            <button className="drawer-close" onClick={() => setPanel(null)}>×</button>
 
-            {modal === 'version' && (
+            {panel === 'version' && (
               <>
                 <h3>Lyrics Version</h3>
                 {mockVersions.map(v => (
@@ -117,16 +118,16 @@ export default function Player({ snapshot, lrc }: Props) {
                     </div>
                     {selectedVersion === v.id
                       ? <span style={{ fontSize: '0.8rem', color: 'var(--accent)', fontWeight: 500 }}>In use</span>
-                      : <button className="btn" onClick={() => { setSelectedVersion(v.id); setModal(null) }}>Use</button>}
+                      : <button className="btn" onClick={() => { setSelectedVersion(v.id); setPanel(null) }}>Use</button>}
                   </div>
                 ))}
-                <button className="btn" style={{ width: '100%', marginTop: 14 }} onClick={() => setModal(null)}>
+                <button className="btn" style={{ width: '100%', marginTop: 14 }} onClick={() => setPanel(null)}>
                   Search manually
                 </button>
               </>
             )}
 
-            {modal === 'sync' && (
+            {panel === 'sync' && (
               <>
                 <h3>Share Lyrics Live</h3>
                 <div style={{ textAlign: 'center' }}>
@@ -145,7 +146,7 @@ export default function Player({ snapshot, lrc }: Props) {
               </>
             )}
 
-            {modal === 'translate' && (
+            {panel === 'translate' && (
               <>
                 <h3>Translate Lyrics</h3>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
@@ -174,7 +175,7 @@ export default function Player({ snapshot, lrc }: Props) {
               </>
             )}
 
-            {modal === 'settings' && (
+            {panel === 'settings' && (
               <>
                 <h3>Lyrics Settings</h3>
                 <div style={{ marginBottom: 18 }}>
@@ -216,7 +217,7 @@ export default function Player({ snapshot, lrc }: Props) {
               </>
             )}
           </div>
-        </div>
+        </>
       )}
     </>
   )
