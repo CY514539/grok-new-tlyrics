@@ -59,16 +59,16 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 60px 20px 220px;
+  padding: 40px 16px 200px;
 }
 
 .lyrics-container {
   position: relative;
-  height: 280px;
+  height: 260px;
   width: 100%;
   max-width: 900px;
   overflow: hidden;
-  mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, black 12%, black 88%, transparent);
 }
 
 .lyrics {
@@ -83,32 +83,23 @@ body {
 }
 
 .lyrics .line {
-  margin: 0.55em 0;
-  min-height: 1.4em;
+  margin: 0.5em 0;
+  min-height: 1.35em;
   transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
   word-break: break-word;
 }
 
-.lyrics .prev {
-  font-size: 1.3em;
+.lyrics .prev, .lyrics .next {
+  font-size: 1.25em;
   font-weight: 400;
   opacity: 0.45;
-  transform: translateY(-0.3em) scale(0.95);
 }
 
 .lyrics .curr {
-  font-size: 2.5em;
+  font-size: 2.4em;
   font-weight: 650;
   letter-spacing: -0.025em;
   opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-.lyrics .next {
-  font-size: 1.3em;
-  font-weight: 400;
-  opacity: 0.45;
-  transform: translateY(0.3em) scale(0.95);
 }
 
 [data-theme="dark"] .lyrics .curr {
@@ -117,15 +108,15 @@ body {
 
 .bottom-panel {
   position: fixed;
-  bottom: 16px;
+  bottom: 12px;
   left: 50%;
   transform: translateX(-50%);
-  width: min(960px, calc(100% - 32px));
+  width: min(960px, calc(100% - 24px));
   background: var(--panel);
   backdrop-filter: blur(24px);
   border: 1px solid var(--border);
-  border-radius: 22px;
-  padding: 12px 14px 14px;
+  border-radius: 18px;
+  padding: 10px 12px 12px;
   box-shadow: var(--shadow);
   z-index: 20;
 }
@@ -134,56 +125,78 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  margin-bottom: 10px;
+  gap: 8px;
+  margin-bottom: 8px;
   flex-wrap: nowrap;
 }
 
 .btn {
-  background: rgba(0,0,0,0.05);
+  background: rgba(0,0,0,0.06);
   border: none;
-  border-radius: 10px;
-  padding: 0 12px;
-  font-size: 0.78rem;
+  border-radius: 12px;
+  padding: 0 14px;
+  font-size: 0.9rem;
   font-weight: 500;
   color: var(--text);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
-  min-width: 68px;
-  height: 34px;
-  line-height: 1;
+  min-width: 80px;
+  height: 42px;
   transition: all 0.15s;
   flex-shrink: 0;
 }
 
 .btn.icon-only {
-  min-width: 34px;
-  width: 34px;
+  min-width: 42px;
+  width: 42px;
   padding: 0;
-  font-size: 0.95rem;
+  font-size: 1.1rem;
 }
 
-[data-theme="dark"] .btn { background: rgba(255,255,255,0.08); }
-.btn:hover { background: rgba(0,0,0,0.09); }
-[data-theme="dark"] .btn:hover { background: rgba(255,255,255,0.13); }
+[data-theme="dark"] .btn { background: rgba(255,255,255,0.1); }
+.btn:hover { background: rgba(0,0,0,0.1); }
+[data-theme="dark"] .btn:hover { background: rgba(255,255,255,0.16); }
 .btn.active { background: var(--accent); color: #fff; }
 
-.offset-display {
-  font-size: 0.78rem;
-  min-width: 48px;
-  text-align: center;
-  font-variant-numeric: tabular-nums;
-  font-weight: 500;
+.offset-group {
+  display: flex;
+  align-items: center;
+  background: rgba(0,0,0,0.06);
+  border-radius: 12px;
+  height: 42px;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .offset-group { background: rgba(255,255,255,0.1); }
+
+.offset-btn {
+  background: transparent;
+  border: none;
+  width: 40px;
+  height: 42px;
+  font-size: 1rem;
+  color: var(--text);
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 34px;
 }
 
-.song-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.offset-btn:hover { background: rgba(0,0,0,0.08); }
+[data-theme="dark"] .offset-btn:hover { background: rgba(255,255,255,0.08); }
+
+.offset-value {
+  font-size: 0.9rem;
+  font-weight: 500;
+  min-width: 52px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  padding: 0 4px;
+}
+
+.song-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
 .song-title { font-weight: 600; font-size: 0.95rem; }
 .song-artist { font-size: 0.8rem; color: var(--text-secondary); }
 
