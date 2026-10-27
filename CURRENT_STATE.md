@@ -4,24 +4,25 @@
 
 ## 当前阶段
 
-**Mock 工具已就绪** — 可以开始定义媒体协议与播放器骨架。
+**协议已定义** — WebSocket 与 Canonical Snapshot 契约已就绪，可开始搭建播放器骨架。
 
 ## 已完成
 
 - [x] 确定干净重做策略
 - [x] 建立项目大脑文件并推送到仓库
-- [x] 完善 Mock 策略
-- [x] 实现最小 Mock 媒体事件发送工具（tools/mock-sender）
+- [x] 完善 Mock 策略并实现最小发送工具
+- [x] 定义 Canonical Media Snapshot 结构
+- [x] 定义 WebSocket 协议
 
 ## 正在进行
 
-- 定义 WebSocket 协议与 Canonical Snapshot 结构
+- 搭建前端播放器骨架（三行 KTV + 本地时钟推算）
 
 ## 下一步（按优先级）
 
-1. 定义 WebSocket 协议与 Canonical Snapshot 结构
-2. 搭建前端播放器骨架（三行 KTV + 本地时钟推算）
-3. 实现歌词匹配服务的接口契约（先 Mock）
+1. 搭建前端播放器骨架（三行 KTV + 本地时钟推算）
+2. 实现歌词匹配服务的接口契约（先 Mock）
+3. 前端对接 WebSocket 并消费 Snapshot
 
 ## 已知问题 / 风险
 
