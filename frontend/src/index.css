@@ -75,8 +75,7 @@ body {
   height: 260px;
   width: 100%;
   max-width: 900px;
-  overflow: hidden;
-  mask-image: linear-gradient(to bottom, transparent, black 12%, black 88%, transparent);
+  overflow: visible;
 }
 
 .lyrics {
@@ -100,7 +99,7 @@ body {
 .lyrics .prev, .lyrics .next {
   font-size: 1.3em;
   font-weight: 500;
-  opacity: 0.65;
+  opacity: 0.75;
 }
 
 .lyrics .curr {
