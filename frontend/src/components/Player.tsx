@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { CanonicalMediaSnapshot } from '../types'
 import { useLocalProgress } from '../hooks/useLocalProgress'
 import { parseLrc } from '../utils/lrc'
@@ -36,23 +36,29 @@ export default function Player({ snapshot, lrc }: Props) {
   const durationMs = (snapshot.durationSec || 0) * 1000
   const progressPercent = durationMs > 0 ? Math.min(100, (progressMs / durationMs) * 100) : 0
 
-  const [theme, setTheme] = useState<'light' | 'dark'>('light')
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => (localStorage.getItem('theme') as 'light' | 'dark') || 'light')
   const [panel, setPanel] = useState<string | null>(null)
-  const [offsetMs, setOffsetMs] = useState(0)
+  const [offsetMs, setOffsetMs] = useState(() => Number(localStorage.getItem('offsetMs')) || 0)
   const [selectedVersion, setSelectedVersion] = useState('v1')
   const [translateOn, setTranslateOn] = useState(false)
   const [fromLang, setFromLang] = useState('auto')
   const [toLang, setToLang] = useState('zh-CN')
-  const [fontSize, setFontSize] = useState(100)
-  const [lineSpacing, setLineSpacing] = useState(100)
-  const [align, setAlign] = useState<'left' | 'center' | 'right'>('center')
+  const [fontSize, setFontSize] = useState(() => Number(localStorage.getItem('fontSize')) || 100)
+  const [lineSpacing, setLineSpacing] = useState(() => Number(localStorage.getItem('lineSpacing')) || 100)
+  const [align, setAlign] = useState<'left' | 'center' | 'right'>(() => (localStorage.getItem('align') as any) || 'center')
   const [copied, setCopied] = useState(false)
 
-  const toggleTheme = () => {
-    const next = theme === 'light' ? 'dark' : 'light'
-    setTheme(next)
-    document.documentElement.setAttribute('data-theme', next === 'dark' ? 'dark' : '')
-  }
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : '')
+    localStorage.setItem('theme', theme)
+  }, [theme])
+
+  useEffect(() => { localStorage.setItem('offsetMs', String(offsetMs)) }, [offsetMs])
+  useEffect(() => { localStorage.setItem('fontSize', String(fontSize)) }, [fontSize])
+  useEffect(() => { localStorage.setItem('lineSpacing', String(lineSpacing)) }, [lineSpacing])
+  useEffect(() => { localStorage.setItem('align', align) }, [align])
+
+  const toggleTheme = () => setTheme(t => t === 'light' ? 'dark' : 'light')
 
   const copyLink = () => {
     navigator.clipboard?.writeText('https://view.t-lyrics.com/s/demo')
@@ -62,15 +68,17 @@ export default function Player({ snapshot, lrc }: Props) {
 
   return (
     <>
-      <div className="lyrics" style={{ textAlign: align, fontSize: `${fontSize}%`, lineHeight: lineSpacing / 100 }}>
-        <div className="prev">{prev?.text || '\u00a0'}</div>
-        <div className="curr">{curr?.text || '\u00a0'}</div>
-        <div className="next">{next?.text || '\u00a0'}</div>
+      <div className={`main ${panel ? 'panel-open' : ''}`} style={{ display: 'contents' }}>
+        <div className="lyrics" style={{ textAlign: align, fontSize: `${fontSize}%`, lineHeight: lineSpacing / 100 }}>
+          <div className="prev">{prev?.text || '\u00a0'}</div>
+          <div className="curr">{curr?.text || '\u00a0'}</div>
+          <div className="next">{next?.text || '\u00a0'}</div>
+        </div>
       </div>
 
       <div className="bottom-panel">
         <div className="controls">
-          <button className="btn" onClick={toggleTheme}>{theme === 'light' ? '☀' : '☾'}</button>
+          <button className={`btn ${theme === 'dark' ? 'active' : ''}`} onClick={toggleTheme}>{theme === 'light' ? '☀' : '☾'}</button>
           <button className="btn" onClick={() => setPanel('version')}>Lyrics Version</button>
           <button className="btn" onClick={() => setOffsetMs(o => o - 500)}>⏪</button>
           <span style={{ fontSize: '0.8rem', minWidth: 48, textAlign: 'center' }}>
@@ -197,7 +205,7 @@ export default function Player({ snapshot, lrc }: Props) {
                   <div style={{ marginBottom: 8 }}>Alignment</div>
                   <div style={{ display: 'flex', gap: 8 }}>
                     {(['left', 'center', 'right'] as const).map(a => (
-                      <button key={a} className="btn" style={{ flex: 1, background: align === a ? 'var(--accent)' : undefined, color: align === a ? '#fff' : undefined }} onClick={() => setAlign(a)}>
+                      <button key={a} className={`btn ${align === a ? 'active' : ''}`} style={{ flex: 1 }} onClick={() => setAlign(a)}>
                         {a === 'left' ? '←' : a === 'center' ? '↔' : '→'}
                       </button>
                     ))}
