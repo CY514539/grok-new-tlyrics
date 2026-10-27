@@ -218,16 +218,19 @@ export default function Player({ snapshot, lrc }: Props) {
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
                     <span>Font size</span><span>{fontSize}%</span>
                   </div>
-                  <input type="range" min="60" max="200" value={fontSize} onChange={e => setFontSize(Number(e.target.value))} style={{ width: '100%' }} />
+                  <input type="range" min="50" max="220" value={fontSize} onChange={e => setFontSize(Number(e.target.value))} style={{ width: '100%' }} />
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: 'var(--text-secondary)' }}>
-                    <span>Smaller</span><span>Default</span><span>Larger</span>
+                    <span>Smaller</span><span>Default 100%</span><span>Larger</span>
                   </div>
                 </div>
                 <div style={{ marginBottom: 20 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
                     <span>Line spacing</span><span>{lineSpacing}%</span>
                   </div>
-                  <input type="range" min="70" max="180" value={lineSpacing} onChange={e => setLineSpacing(Number(e.target.value))} style={{ width: '100%' }} />
+                  <input type="range" min="60" max="200" value={lineSpacing} onChange={e => setLineSpacing(Number(e.target.value))} style={{ width: '100%' }} />
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: 'var(--text-secondary)' }}>
+                    <span>Tighter</span><span>Default 120%</span><span>Looser</span>
+                  </div>
                 </div>
                 <div style={{ marginBottom: 20 }}>
                   <div style={{ marginBottom: 8 }}>Alignment</div>
