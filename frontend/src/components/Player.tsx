@@ -107,22 +107,20 @@ export default function Player({ snapshot, lrc }: Props) {
             {modal === 'version' && (
               <>
                 <h3>Lyrics Version</h3>
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  {mockVersions.map(v => (
-                    <div key={v.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderBottom: '1px solid var(--border)' }}>
-                      <div>
-                        <div style={{ fontWeight: 500 }}>{v.title}</div>
-                        <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
-                          {v.artist} · {v.duration} · {v.synced ? 'Synced LRC' : 'Plain text'}
-                        </div>
+                {mockVersions.map(v => (
+                  <div key={v.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderBottom: '1px solid var(--border)' }}>
+                    <div>
+                      <div style={{ fontWeight: 500 }}>{v.title}</div>
+                      <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
+                        {v.artist} · {v.duration} · {v.synced ? 'Synced LRC' : 'Plain text'}
                       </div>
-                      {selectedVersion === v.id
-                        ? <span style={{ fontSize: '0.8rem', color: 'var(--accent)', fontWeight: 500 }}>In use</span>
-                        : <button className="btn" onClick={() => { setSelectedVersion(v.id); setModal(null) }}>Use</button>}
                     </div>
-                  ))}
-                </div>
-                <button className="btn" style={{ width: '100%', marginTop: 12 }} onClick={() => setModal(null)}>
+                    {selectedVersion === v.id
+                      ? <span style={{ fontSize: '0.8rem', color: 'var(--accent)', fontWeight: 500 }}>In use</span>
+                      : <button className="btn" onClick={() => { setSelectedVersion(v.id); setModal(null) }}>Use</button>}
+                  </div>
+                ))}
+                <button className="btn" style={{ width: '100%', marginTop: 14 }} onClick={() => setModal(null)}>
                   Search manually
                 </button>
               </>
@@ -132,16 +130,16 @@ export default function Player({ snapshot, lrc }: Props) {
               <>
                 <h3>Share Lyrics Live</h3>
                 <div style={{ textAlign: 'center' }}>
-                  <div style={{ width: 180, height: 180, margin: '12px auto', background: '#fff', borderRadius: 12, display: 'grid', placeItems: 'center', border: '1px solid #eee', fontSize: '0.75rem', color: '#aaa' }}>
-                    QR Code<br/>(placeholder)
+                  <div style={{ width: 180, height: 180, margin: '8px auto 12px', background: '#fff', borderRadius: 12, display: 'grid', placeItems: 'center', border: '1px solid #eee', fontSize: '0.75rem', color: '#aaa' }}>
+                    QR Code
                   </div>
-                  <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Scan to follow lyrics on your phone</p>
-                  <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: '0 0 12px' }}>Scan to follow on phone or tablet</p>
+                  <div style={{ display: 'flex', gap: 8 }}>
                     <input readOnly value="https://view.t-lyrics.com/s/demo" style={{ flex: 1, padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'transparent', color: 'inherit', fontSize: '0.8rem' }} />
                     <button className="btn" onClick={copyLink}>{copied ? 'Copied' : 'Copy'}</button>
                   </div>
-                  <div style={{ marginTop: 16, fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                    Link valid for 12 hours · Read-only
+                  <div style={{ marginTop: 14, fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                    Link valid for 12 hours · Read-only viewer
                   </div>
                 </div>
               </>
@@ -150,14 +148,12 @@ export default function Player({ snapshot, lrc }: Props) {
             {modal === 'translate' && (
               <>
                 <h3>Translate Lyrics</h3>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
                   <div>
-                    <div>Show translation</div>
+                    <div style={{ fontWeight: 500 }}>Show translation</div>
                     <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Keep original lyrics visible</div>
                   </div>
-                  <button className="btn" onClick={() => setTranslateOn(!translateOn)} style={{ background: translateOn ? 'var(--accent)' : undefined, color: translateOn ? '#fff' : undefined }}>
-                    {translateOn ? 'On' : 'Off'}
-                  </button>
+                  <button className={`toggle ${translateOn ? 'on' : ''}`} onClick={() => setTranslateOn(!translateOn)} />
                 </div>
                 <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
                   <select value={fromLang} onChange={e => setFromLang(e.target.value)} className="btn" style={{ flex: 1 }}>
@@ -165,7 +161,7 @@ export default function Player({ snapshot, lrc }: Props) {
                     <option value="zh-TW">繁體中文</option>
                     <option value="en">English</option>
                   </select>
-                  <span style={{ opacity: 0.5 }}>→</span>
+                  <span style={{ opacity: 0.4 }}>→</span>
                   <select value={toLang} onChange={e => setToLang(e.target.value)} className="btn" style={{ flex: 1 }}>
                     <option value="zh-CN">简体中文</option>
                     <option value="en">English</option>
@@ -173,7 +169,7 @@ export default function Player({ snapshot, lrc }: Props) {
                   </select>
                 </div>
                 <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: 16 }}>
-                  Beta: lyrics are translated only when enabled.
+                  Beta: lyric lines are sent for translation only when enabled.
                 </p>
               </>
             )}
@@ -186,7 +182,7 @@ export default function Player({ snapshot, lrc }: Props) {
                     <span>Font size</span><span>{fontSize}%</span>
                   </div>
                   <input type="range" min="70" max="150" value={fontSize} onChange={e => setFontSize(Number(e.target.value))} style={{ width: '100%' }} />
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: 'var(--text-secondary)' }}>
                     <span>Smaller</span><span>Default</span><span>Larger</span>
                   </div>
                 </div>
@@ -196,19 +192,22 @@ export default function Player({ snapshot, lrc }: Props) {
                   </div>
                   <input type="range" min="80" max="140" value={lineSpacing} onChange={e => setLineSpacing(Number(e.target.value))} style={{ width: '100%' }} />
                 </div>
-                <div style={{ marginBottom: 12 }}>
+                <div style={{ marginBottom: 16 }}>
                   <div style={{ marginBottom: 8 }}>Alignment</div>
                   <div style={{ display: 'flex', gap: 8 }}>
                     {(['left', 'center', 'right'] as const).map(a => (
-                      <button
-                        key={a}
-                        className="btn"
-                        style={{ flex: 1, background: align === a ? 'var(--accent)' : undefined, color: align === a ? '#fff' : undefined }}
-                        onClick={() => setAlign(a)}
-                      >
+                      <button key={a} className="btn" style={{ flex: 1, background: align === a ? 'var(--accent)' : undefined, color: align === a ? '#fff' : undefined }} onClick={() => setAlign(a)}>
                         {a === 'left' ? '←' : a === 'center' ? '↔' : '→'}
                       </button>
                     ))}
+                  </div>
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  <div style={{ marginBottom: 8, fontSize: '0.85rem' }}>Day colors</div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
+                    <div className="color-swatch" style={{ background: '#f3f4f6', color: '#333' }}>Background</div>
+                    <div className="color-swatch" style={{ background: '#101318' }}>Current</div>
+                    <div className="color-swatch" style={{ background: '#24282f' }}>Next</div>
                   </div>
                 </div>
                 <button className="btn" style={{ width: '100%', marginTop: 8 }} onClick={() => { setFontSize(100); setLineSpacing(100); setAlign('center') }}>
