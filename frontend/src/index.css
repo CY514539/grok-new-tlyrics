@@ -60,12 +60,18 @@ body {
   align-items: center;
   justify-content: center;
   padding: 60px 20px 220px;
+  transition: padding-right 0.3s ease;
+}
+
+.main.panel-open {
+  padding-right: min(400px, 40vw);
 }
 
 .lyrics {
   text-align: center;
   max-width: 880px;
   width: 100%;
+  transition: all 0.2s ease;
 }
 
 .lyrics .prev, .lyrics .next {
@@ -73,6 +79,7 @@ body {
   color: var(--text-secondary);
   margin: 10px 0;
   min-height: 1.5em;
+  transition: opacity 0.15s;
 }
 
 .lyrics .curr {
@@ -96,6 +103,7 @@ body {
   padding: 14px 18px 16px;
   box-shadow: var(--shadow);
   z-index: 20;
+  transition: width 0.3s ease;
 }
 
 .controls {
@@ -123,6 +131,7 @@ body {
 [data-theme="dark"] .btn { background: rgba(255,255,255,0.08); }
 .btn:hover { background: rgba(0,0,0,0.1); }
 [data-theme="dark"] .btn:hover { background: rgba(255,255,255,0.14); }
+.btn.active { background: var(--accent); color: #fff; }
 
 .song-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .song-title { font-weight: 600; font-size: 0.95rem; }
@@ -140,7 +149,6 @@ body {
 [data-theme="dark"] .progress-track { background: rgba(255,255,255,0.15); }
 .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; }
 
-/* Side drawer instead of full overlay */
 .drawer-overlay {
   position: fixed;
   inset: 0;
@@ -162,6 +170,13 @@ body {
   overflow-y: auto;
   z-index: 100;
   color: var(--text);
+  transform: translateX(0);
+  animation: slideIn 0.28s ease;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
 }
 
 .drawer h3 { margin: 0 0 18px; font-size: 1.15rem; font-weight: 600; }
@@ -199,4 +214,6 @@ body {
   border: 1px solid var(--border); cursor: pointer;
   display: flex; align-items: flex-end; padding: 6px;
   font-size: 0.7rem; color: #fff;
+  transition: transform 0.15s;
 }
+.color-swatch:hover { transform: scale(1.03); }
