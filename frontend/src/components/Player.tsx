@@ -84,10 +84,16 @@ export default function Player({ snapshot, lrc }: Props) {
 
   return (
     <>
-      <div className="lyrics" style={{ textAlign: align, fontSize: `${fontSize}%`, lineHeight: lineSpacing / 100 }}>
-        <div className="line prev" style={{ color: colors.next }}>{prev?.text || '\u00a0'}</div>
-        <div className="line curr" style={{ color: colors.curr }}>{curr?.text || '\u00a0'}</div>
-        <div className="line next" style={{ color: colors.next }}>{next?.text || '\u00a0'}</div>
+      <div className="lyrics-container">
+        <div
+          key={currentIndex}
+          className="lyrics"
+          style={{ textAlign: align, fontSize: `${fontSize}%`, lineHeight: lineSpacing / 100 }}
+        >
+          <div className="line prev" style={{ color: colors.next }}>{prev?.text || '\u00a0'}</div>
+          <div className="line curr" style={{ color: colors.curr }}>{curr?.text || '\u00a0'}</div>
+          <div className="line next" style={{ color: colors.next }}>{next?.text || '\u00a0'}</div>
+        </div>
       </div>
 
       <div className="bottom-panel">
